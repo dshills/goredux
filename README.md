@@ -45,9 +45,9 @@ go get -u github.com/dshills/redux
     func (s *MyState)Reduce(a Actioner) StateReducer {
         switch a.Action() {
             case "add":
-                return &MyState{Val: s.Val++}
+                return &MyState{Val: s.Val+1}
             case "subtract":
-                return &MyState{Val: s.Val--}
+                return &MyState{Val: s.Val-1}
         }
         return s
     }
