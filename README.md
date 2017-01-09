@@ -26,7 +26,7 @@ type StateReducer interface {
     Key() string
 }
 ```
-A WrappedState struct is provided for convenience. More on that latter.
+This has the convience of not having to do any runtime typing in the reducer. Passing interface{} around has always bothered me like void pointers in C, handy but scary. A WrappedState struct is provided for convenience. More on that latter.
 
 ## Instalation
 
@@ -35,6 +35,8 @@ go get -u github.com/dshills/redux
 ```
 
 ## Usage
+
+### Basic
 ```Go
 		import "github.com/dshills/goredux"
 
@@ -77,3 +79,63 @@ go get -u github.com/dshills/redux
     }
 ```
 
+### WrappedState
+
+Often the data structures we use in our applications are not written by us. This can be a problem for something like GoRedux because the interface requires a Reduce and Key functions. Enter the wrapped state. Take any interface{} and wrap it for Redux.
+
+```Go
+const wrapKeyName = "External Struct"
+data := SomeData{}
+addAction := &goredux.BasicAction{Act: "+", KeyName: wrapKeyName}
+subAction := &goredux.BasicAction{Act: "-", KeyName: wrapKeyName}
+
+ws := goredux.WrapState(&data, wrapKeyName, func(i interface{}, a Actioner) interface{} {
+	s, ok := i.(*SomeData)
+	if !ok {
+		return i
+	}
+	switch a.Action() {
+	case "+":
+		return &SomeData{Val: s.Val + 1}
+	case "-":
+		return &SomeData{Val: s.Val - 1}
+	}
+	return i
+})
+
+redux := goredux.New(ws)
+```
+
+### Custom Actions
+
+Actions are based on the Actioner interface defined as:
+```Go
+type Actioner interface {
+	Action() string
+}
+```
+
+If more information is needed by a reducer to implement the action it can be built into a custom action.
+```Go
+type MyAction struct {
+	Name string
+	Phone string
+}
+
+func (a *MyAction)Action() string {
+	return "update"
+}
+```
+
+### Hooks
+
+To allow for middleware and external tools to have access to the state changes there can be added before and after the reducers are called. Along with the timing, hooks are not specific to any key, they receive all Dispatches.
+
+```Go
+func MyPreHook(s StateReducer, a Actioner) {
+	// Do something exciting
+}
+
+redux := goredux.New(...)
+redux.Hook(MyPreHook, goredox.BeforeReduce)
+```
