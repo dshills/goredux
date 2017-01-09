@@ -36,13 +36,16 @@ go get -u github.com/dshills/redux
 
 ## Usage
 ```Go
+		import "github.com/dshills/goredux"
+
     const stateKey = "MyFancyState"
+    addAction := &goredux.BasicAction{Act: "add", KeyName: stateKey}
 
     type MyState struct {
         Val int
     }
 
-    func (s *MyState)Reduce(a Actioner) StateReducer {
+    func (s *MyState)Reduce(a goredux.Actioner) goredux.StateReducer {
         switch a.Action() {
             case "add":
                 return &MyState{Val: s.Val+1}
@@ -56,14 +59,13 @@ go get -u github.com/dshills/redux
         return stateKey
     }
 
-    redux := New(&MyState{})
+    redux := goredux.New(&MyState{})
 
-    act := &BasicAction{Act: "add", KeyName: stateKey}
-    redux.Dispatch(a)
-    redux.Dispatch(a)
-    redux.Dispatch(a)
-    redux.Dispatch(a)
-    redux.Dispatch(a)
+    redux.Dispatch(addAction)
+    redux.Dispatch(addAction)
+    redux.Dispatch(addAction)
+    redux.Dispatch(addAction)
+    redux.Dispatch(addAction)
 
     i, ok := redux.State(stateKey)
     if !ok {
