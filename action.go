@@ -1,4 +1,4 @@
-package redux
+package goredux
 
 // Actioner is a Redux Action
 type Actioner interface {

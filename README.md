@@ -129,7 +129,7 @@ func (a *MyAction)Action() string {
 
 ### Hooks
 
-To allow for middleware and external tools to have access to the state changes there can be added before and after the reducers are called. Along with the timing, hooks are not specific to any key, they receive all Dispatches.
+To allow for middleware and external tools to have access to the state changes they can be added before and after the reducers are called. Along with the timing, hooks are not specific to any key, they receive all Dispatches.
 
 ```Go
 func MyPreHook(s StateReducer, a Actioner) {

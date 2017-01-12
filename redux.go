@@ -1,4 +1,4 @@
-package redux
+package goredux
 
 // StateReducer is an interface requiring a Reduce method
 type StateReducer interface {

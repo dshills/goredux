@@ -1,4 +1,4 @@
-package redux
+package goredux
 
 // WrappedReducerFunc is a function that gets the state and an action
 // and returns a new state

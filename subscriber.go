@@ -1,4 +1,4 @@
-package redux
+package goredux
 
 // Listener is a function that receives State after it changes
 type Listener func(StateReducer)
